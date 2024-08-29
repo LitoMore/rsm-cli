@@ -1,0 +1,56 @@
+{
+	"prettier": true,
+	"ignores": ["next.config.js"],
+	"extends": ["xo-react", "plugin:react/jsx-runtime"],
+	"plugins": ["import"],
+	"rules": {
+		"n/file-extension-in-import": "off",
+		"react/prefer-read-only-props": "off",
+		"sort-imports": [
+			"error",
+			{
+				"ignoreCase": false,
+				"ignoreDeclarationSort": true,
+				"ignoreMemberSort": false,
+				"memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+				"allowSeparatedGroups": false
+			}
+		],
+		"import/no-named-as-default": "off",
+		"import/extensions": "off",
+		"import/order": [
+			"error",
+			{
+				"groups": ["builtin", "external", "parent", "sibling", "index"],
+				"pathGroups": [
+					{
+						"pattern": "react",
+						"group": "builtin",
+						"position": "before"
+					}
+				],
+				"alphabetize": {
+					"order": "asc",
+					"caseInsensitive": true
+				},
+				"pathGroupsExcludedImportTypes": ["react"],
+				"warnOnUnassignedImports": true,
+				"newlines-between": "never"
+			}
+		],
+		"react/jsx-sort-props": [
+			"error",
+			{
+				"callbacksLast": true,
+				"shorthandFirst": true,
+				"reservedFirst": true
+			}
+		],
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{
+				"prefer": "no-type-imports"
+			}
+		]
+	}
+}

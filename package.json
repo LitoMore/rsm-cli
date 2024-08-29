@@ -1,0 +1,47 @@
+{
+	"name": "rsm-cli",
+	"version": "0.0.0",
+	"description": "Resume CLI",
+	"repository": "https://github.com/LitoMore/rsm-cli",
+	"type": "module",
+	"bin": {
+		"rsm": "./distribution/cli.js",
+		"rsm-cli": "./distribution/cli.js"
+	},
+	"scripts": {
+		"prepublishOnly": "npm run build",
+		"prebuild": "npm run clean",
+		"build": "tsc && chmod +x distribution/cli.js",
+		"clean": "del-cli distribution"
+	},
+	"keywords": [
+		"resume",
+		"cli"
+	],
+	"author": "LitoMore",
+	"license": "MIT",
+	"devDependencies": {
+		"@sindresorhus/tsconfig": "^6.0.0",
+		"@types/node": "^22.4.0",
+		"@types/react": "^18.3.3",
+		"del-cli": "^5.1.0",
+		"eslint-config-xo-react": "^0.27.0",
+		"eslint-plugin-import": "^2.29.1",
+		"eslint-plugin-react": "^7.35.0",
+		"eslint-plugin-react-hooks": "^4.6.2",
+		"typescript": "^5.5.4",
+		"xo": "^0.59.3"
+	},
+	"dependencies": {
+		"cli-spinners": "^2.9.2",
+		"date-fns": "^3.6.0",
+		"got": "^14.4.2",
+		"ink": "^5.0.1",
+		"ink-color-pipe": "^4.0.0",
+		"log-symbols": "^5.1.0",
+		"meow": "^13.2.0",
+		"ow": "^2.0.0",
+		"react": "^18.3.1",
+		"terminal-link": "^3.0.0"
+	}
+}
