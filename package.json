@@ -15,7 +15,8 @@
 		"prepublishOnly": "npm run build",
 		"prebuild": "npm run clean",
 		"build": "tsc && chmod +x distribution/cli.js",
-		"clean": "del-cli distribution"
+		"clean": "del-cli distribution",
+		"test": "xo"
 	},
 	"keywords": [
 		"resume",
