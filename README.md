@@ -19,7 +19,7 @@ $ rsm --help
   Example
     $ rsm LitoMore
     $ rsm LitoMore/LitoMore
-    $ rsm https://exmaple.com/resume.json
+    $ rsm https://example.com/resume.json
     $ rsm path/to/resume.json
 ```
 

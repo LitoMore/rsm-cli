@@ -19,10 +19,10 @@ const cli = meow(
   Usage
     $ rsm-cli <resume>
 
-	Example
+  Example
     $ rsm-cli LitoMore
     $ rsm-cli LitoMore/LitoMore
-    $ rsm-cli https://exmaple.com/resume.json
+    $ rsm-cli https://example.com/resume.json
     $ rsm-cli path/to/resume.json
 `,
 	{
