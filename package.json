@@ -8,6 +8,9 @@
 		"rsm": "./distribution/cli.js",
 		"rsm-cli": "./distribution/cli.js"
 	},
+	"files": [
+		"distribution"
+	],
 	"scripts": {
 		"prepublishOnly": "npm run build",
 		"prebuild": "npm run clean",
