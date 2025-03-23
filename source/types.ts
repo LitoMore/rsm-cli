@@ -1,6 +1,7 @@
 import {BoxProps} from 'ink';
 
 export type Resume = {
+	version: number;
 	firstName: string;
 	lastName: string;
 	sections: SectionProperties[];
@@ -29,3 +30,5 @@ export type SectionProperties = {
 };
 
 export type TargetType = 'url' | 'file' | 'github' | 'unknown';
+
+export type ErrorMessageItem = {title: string; message: string};

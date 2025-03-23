@@ -4,14 +4,17 @@ import {Box, Text, render} from 'ink';
 import Color from 'ink-color-pipe';
 import logSymbols from 'log-symbols';
 import meow from 'meow';
+import {ZodError} from 'zod';
 import {Section} from './componets.js';
+import {colors} from './constants.js';
 import {Spinner} from './spinner.js';
-import {Resume, TargetType} from './types.js';
+import {ErrorMessageItem, Resume, TargetType} from './types.js';
 import {
-	checkResume,
+	formatZodError,
 	getTargetPath,
 	loadResume,
 	parsePlainText,
+	zodResume,
 } from './utils.js';
 
 const cli = meow(
@@ -44,25 +47,27 @@ else if (githubHandlePattern.test(target)) targetType = 'github';
 function App() {
 	const [resume, setResume] = useState<Resume>();
 	const [errorName, setErrorName] = useState<string>();
-	const [errorMessage, setErrorMessage] = useState<string>();
+	const [errorMessages, setErrorMessages] = useState<ErrorMessageItem[]>([]);
 	const [errorUrl, setErrorUrl] = useState<string>();
 
-	const showError = (error: Error) => {
-		setErrorName(error?.name || 'UnknownErrror');
-		setErrorMessage(error?.message || 'There were some errors.');
+	const showError = (error: unknown) => {
+		const isZodError = error instanceof ZodError;
+		setErrorName(isZodError ? 'Validation Error' : 'Unknown Errror');
+		setErrorMessages(
+			isZodError
+				? formatZodError(error)
+				: [{title: '', message: 'There were some errors.'}],
+		);
 		setErrorUrl(getTargetPath(targetType, target));
 	};
 
 	useEffect(() => {
 		if (!target) return;
 		const fetchResume = async () => {
-			try {
-				const resume = await loadResume(targetType, target);
-				checkResume(resume);
-				setResume(resume);
-			} catch (error) {
-				showError(error as Error);
-			}
+			const resume = await loadResume(targetType, target);
+			const {success, error} = zodResume.safeParse(resume);
+			if (!success) showError(error);
+			setResume(resume);
 		};
 
 		void fetchResume();
@@ -72,29 +77,36 @@ function App() {
 		return <Text>{logSymbols.error} Please specify a target resume</Text>;
 	}
 
-	if (errorMessage) {
-		const isArgumentError = errorName === 'ArgumentError';
+	if (errorMessages.length > 0) {
+		const isValidationError = errorName === 'Validation Error';
 		return (
 			<Box
 				borderStyle={resume?.borderStyle ?? 'classic'}
 				flexDirection="column"
 			>
 				<Box justifyContent="center">
-					<Color styles="bgRed.white"> {errorName} </Color>
+					<Color styles={colors.error}> {errorName} </Color>
 				</Box>
 				<Box
-					borderStyle={isArgumentError ? 'round' : undefined}
 					flexDirection="column"
 					justifyContent="center"
 					marginLeft={1}
 					marginRight={1}
 				>
-					{errorMessage.split('\n').map((line, index) => (
+					{errorMessages.map((line, index) => (
 						<Box
 							key={`line-${String(index)}`}
-							justifyContent={isArgumentError ? 'flex-start' : 'center'}
+							borderStyle={isValidationError ? 'round' : undefined}
+							justifyContent="center"
 						>
-							<Text>{line}</Text>
+							<Box
+								alignItems="center"
+								flexDirection="column"
+								justifyContent="center"
+							>
+								<Color styles={colors.property}> {line.title} </Color>
+								<Text>{line.message}</Text>
+							</Box>
 						</Box>
 					))}
 				</Box>
