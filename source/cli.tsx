@@ -56,7 +56,15 @@ function App() {
 		setErrorMessages(
 			isZodError
 				? formatZodError(error)
-				: [{title: '', message: 'There were some errors.'}],
+				: [
+						{
+							title: '',
+							message:
+								error instanceof Error
+									? error.message
+									: 'There were some errors',
+						},
+					],
 		);
 		setErrorUrl(getTargetPath(targetType, target));
 	};
@@ -64,10 +72,13 @@ function App() {
 	useEffect(() => {
 		if (!target) return;
 		const fetchResume = async () => {
-			const resume = await loadResume(targetType, target);
-			const {success, error} = zodResume.safeParse(resume);
-			if (!success) showError(error);
-			setResume(resume);
+			try {
+				const resume = await loadResume(targetType, target);
+				zodResume.parse(resume);
+				setResume(resume);
+			} catch (error) {
+				showError(error);
+			}
 		};
 
 		void fetchResume();
@@ -104,7 +115,9 @@ function App() {
 								flexDirection="column"
 								justifyContent="center"
 							>
-								<Color styles={colors.property}> {line.title} </Color>
+								{line.title && (
+									<Color styles={colors.property}> {line.title} </Color>
+								)}
 								<Text>{line.message}</Text>
 							</Box>
 						</Box>
